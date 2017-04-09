@@ -1,8 +1,8 @@
-package com.github.onlynight.sqlitejt.demo.dao;
+package demo.dao;
 
-import com.github.onlynight.sqlitejt.demo.model.Monkey;
-import org.lion.sqlite.BasicDAO;
-import org.lion.sqlite.SQLiteDataBase;
+import com.github.onlynight.sqlitejt.sqlite.BasicDAO;
+import com.github.onlynight.sqlitejt.sqlite.SQLiteDataBase;
+import demo.model.Monkey;
 
 public class MonkeyDAO extends BasicDAO<Monkey> {
 

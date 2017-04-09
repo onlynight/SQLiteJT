@@ -1,8 +1,8 @@
-package com.github.onlynight.sqlitejt.demo;
+package demo;
 
-import com.github.onlynight.sqlitejt.demo.dao.ManDAO;
-import com.github.onlynight.sqlitejt.demo.database.DataBase;
-import com.github.onlynight.sqlitejt.demo.model.Human;
+import demo.dao.ManDAO;
+import demo.database.DataBase;
+import demo.model.Human;
 
 import java.util.List;
 
@@ -14,10 +14,11 @@ public class Runner {
         ManDAO dao = new ManDAO(dataBase);
         insert(dao);
 //		update(dao);
-		select(dao);
+//		select(dao);
 //		delete(dao);
 //		insert(dao);
 //		count(dao);
+        selectAll(dao);
         dataBase.close();
     }
 
@@ -43,12 +44,18 @@ public class Runner {
     }
 
     public static void select(ManDAO dao) {
-//		List<Human> res = dao.select( "name" , "���Ĵ�" );
         Human entity = new Human();
         entity.setId(2);
         List<Human> res = dao.select(entity);
         for (Human human : res) {
             System.out.println(human.getName());
+        }
+    }
+
+    public static void selectAll(ManDAO dao) {
+        List<Human> men = dao.selectAll();
+        for (Human human : men) {
+            System.out.println(human);
         }
     }
 

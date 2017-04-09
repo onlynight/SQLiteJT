@@ -1,0 +1,190 @@
+package com.github.onlynight.sqlitejt.database.tools;
+
+import com.github.onlynight.sqlitejt.database.annotation.Table;
+import com.github.onlynight.sqlitejt.database.annotation.Tables;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.net.JarURLConnection;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.Enumeration;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+
+/**
+ * package scanner tools. you can use this tools to scan the table classes
+ *
+ * @author onlynight
+ */
+public class PackageScanner {
+
+    public static Set<Class<?>> scanForTable(String packageToScan) {
+        Set<Class<?>> set = scan(packageToScan);
+        Set<Class<?>> res = new LinkedHashSet<Class<?>>();
+        for (Class<?> clazz : set) {
+            if (clazz.isAnnotationPresent(Table.class)) {
+                res.add(clazz);
+            } else if (clazz.isAnnotationPresent(Tables.class)) {
+                res.add(clazz);
+            }
+        }
+        return res;
+    }
+
+    /**
+     * ???packageToScanage?��?????��?Class
+     *
+     * @param packageToScan
+     * @return
+     */
+    public static Set<Class<?>> scan(String packageToScan) {
+
+        // ?????class??????
+        Set<Class<?>> classes = new LinkedHashSet<Class<?>>();
+        // ??????????
+        boolean recursive = true;
+        // ??????????? ???????�I
+        String packageToScanageName = packageToScan;
+        String packageToScanageDirName = packageToScanageName.replace('.', '/');
+        // ?????????????? ???????????????????????things
+        Enumeration<URL> dirs;
+        try {
+            dirs = Thread.currentThread().getContextClassLoader()
+                    .getResources(packageToScanageDirName);
+            // ??????????
+            while (dirs.hasMoreElements()) {
+                // ???????????
+                URL url = dirs.nextElement();
+                // ???��???????
+                String protocol = url.getProtocol();
+                // ????????????????????????????
+                if ("file".equals(protocol)) {
+                    // System.err.println("file????????");
+                    // ???????????��??
+                    String filePath = URLDecoder.decode(url.getFile(), "UTF-8");
+                    // ???????????????????????? ????????????
+                    findAndAddClassesInpackageToScanageByFile(
+                            packageToScanageName, filePath, recursive, classes);
+                } else if ("jar".equals(protocol)) {
+                    // ?????jar?????
+                    // ???????JarFile
+                    System.err.println("jar????????");
+                    JarFile jar;
+                    try {
+                        // ???jar
+                        jar = ((JarURLConnection) url.openConnection())
+                                .getJarFile();
+                        // ???jar?? ???????????
+                        Enumeration<JarEntry> entries = jar.entries();
+                        // ???????????????
+                        while (entries.hasMoreElements()) {
+                            // ???jar????????? ???????? ???��jar???????????? ??META-INF?????
+                            JarEntry entry = entries.nextElement();
+                            String name = entry.getName();
+                            // ???????/?????
+                            if (name.charAt(0) == '/') {
+                                // ?????????????
+                                name = name.substring(1);
+                            }
+                            // ???????????????????
+                            if (name.startsWith(packageToScanageDirName)) {
+                                int idx = name.lastIndexOf('/');
+                                // ?????"/"??�� ???????
+                                if (idx != -1) {
+                                    // ??????? ??"/"?�I??"."
+                                    packageToScanageName = name.substring(0,
+                                            idx).replace('/', '.');
+                                }
+                                // ????????????? ???????????
+                                if ((idx != -1) || recursive) {
+                                    // ????????.class??? ?????????
+                                    if (name.endsWith(".class")
+                                            && !entry.isDirectory()) {
+                                        // ????????".class" ?????????????
+                                        String className = name
+                                                .substring(packageToScanageName
+                                                        .length() + 1, name
+                                                        .length() - 6);
+                                        try {
+                                            // ????classes
+                                            classes.add(Class
+                                                    .forName(packageToScanageName
+                                                            + '.' + className));
+                                        } catch (ClassNotFoundException e) {
+                                            // log
+                                            // .error("??????????????????? ??????????.class???");
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } catch (IOException e) {
+                        // log.error("??????????????????jar????????????");
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return classes;
+    }
+
+    /**
+     * ????????????????????????Class
+     *
+     * @param packageToScanageName
+     * @param packageToScanagePath
+     * @param recursive
+     * @param classes
+     */
+    public static void findAndAddClassesInpackageToScanageByFile(
+            String packageToScanageName, String packageToScanagePath,
+            final boolean recursive, Set<Class<?>> classes) {
+        // ?????????? ???????File
+        File dir = new File(packageToScanagePath);
+        // ???????????? ???????????????
+        if (!dir.exists() || !dir.isDirectory()) {
+            // log.warn("?????????? " + packageToScanageName + " ??????��????");
+            return;
+        }
+        // ??????? ???????????????? ??????
+        File[] dirfiles = dir.listFiles(new FileFilter() {
+            // ??????????? ??????????(????????) ????????.class??��?????(??????java?????)
+            public boolean accept(File file) {
+                return (recursive && file.isDirectory())
+                        || (file.getName().endsWith(".class"));
+            }
+        });
+        // ??????????
+        for (File file : dirfiles) {
+            // ??????? ????????
+            if (file.isDirectory()) {
+                findAndAddClassesInpackageToScanageByFile(packageToScanageName
+                                + "." + file.getName(), file.getAbsolutePath(),
+                        recursive, classes);
+            } else {
+                // ?????java????? ????????.class ?????????
+                String className = file.getName().substring(0,
+                        file.getName().length() - 6);
+                try {
+                    // ???????????
+                    // classes.add(Class.forName(packageToScanageName + '.' +
+                    // className));
+                    // ??????????????????????forName???��?????????static????????????classLoader??load???
+                    classes.add(Thread.currentThread().getContextClassLoader()
+                            .loadClass(packageToScanageName + '.' + className));
+                } catch (ClassNotFoundException e) {
+                    // log.error("??????????????????? ??????????.class???");
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}

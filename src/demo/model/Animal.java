@@ -1,4 +1,4 @@
-package com.github.onlynight.sqlitejt.demo.model;
+package demo.model;
 
 public class Animal {
 

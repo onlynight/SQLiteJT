@@ -1,6 +1,6 @@
-package com.github.onlynight.sqlitejt.demo.model;
+package demo.model;
 
-import org.lion.database.annotation.Table;
+import com.github.onlynight.sqlitejt.database.annotation.Table;
 
 @Table
 public class Monkey extends Animal {
