@@ -1,7 +1,7 @@
 package demo.database;
 
 
-import com.github.onlynight.sqlitejt.sqlite.SQLiteDataBase;
+import com.github.onlynight.sqlitejt.SQLiteDataBase;
 
 public class DataBase extends SQLiteDataBase {
 

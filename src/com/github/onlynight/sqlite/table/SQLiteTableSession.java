@@ -1,10 +1,10 @@
-package com.github.onlynight.sqlitejt.sqlitejt.table;
+package com.github.onlynight.sqlite.table;
 
-import com.github.onlynight.sqlitejt.database.annotation.Id;
-import com.github.onlynight.sqlitejt.database.annotation.Table;
-import com.github.onlynight.sqlitejt.database.annotation.Tables;
-import com.github.onlynight.sqlitejt.database.utils.KeyValues;
-import com.github.onlynight.sqlitejt.sqlitejt.SQLiteUtils;
+import com.github.onlynight.sqlite.table.annotation.Id;
+import com.github.onlynight.sqlite.table.annotation.Table;
+import com.github.onlynight.sqlite.table.annotation.Tables;
+import com.github.onlynight.sqlite.table.utils.KeyValues;
+import com.github.onlynight.sqlite.SQLiteUtils;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

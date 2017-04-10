@@ -1,7 +1,7 @@
-package com.github.onlynight.sqlitejt.sqlite;
+package com.github.onlynight.sqlitejt;
 
-import com.github.onlynight.sqlitejt.sqlitejt.table.SQLiteTableDAO;
-import com.github.onlynight.sqlitejt.sqlitejt.table.SQLiteTableSession;
+import com.github.onlynight.sqlite.table.SQLiteTableDAO;
+import com.github.onlynight.sqlite.table.SQLiteTableSession;
 
 import java.lang.reflect.ParameterizedType;
 import java.sql.ResultSet;
@@ -115,11 +115,7 @@ public class BasicDAO<T> extends SQLiteTableDAO<T> {
             System.out.println(sql);
             ResultSet set = database.getStatement().executeQuery(sql);
             return getObjectList(set);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (SQLException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;
@@ -132,11 +128,7 @@ public class BasicDAO<T> extends SQLiteTableDAO<T> {
             System.out.println(sql);
             ResultSet set = database.getStatement().executeQuery(sql);
             return getObjectList(set);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (SQLException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;
@@ -149,11 +141,7 @@ public class BasicDAO<T> extends SQLiteTableDAO<T> {
             System.out.println(sql);
             ResultSet set = database.getStatement().executeQuery(sql);
             return getObjectList(set);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (SQLException | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
         return null;
@@ -171,17 +159,13 @@ public class BasicDAO<T> extends SQLiteTableDAO<T> {
     }
 
     @Override
-    public List<T> executeQurey(String sql) {
+    public List<T> executeQuery(String sql) {
         String temp = tableSession.selectAll();
         try {
             System.out.println(temp);
             ResultSet set = database.getStatement().executeQuery(temp);
             return getObjectList(set);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (SQLException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;
@@ -194,11 +178,7 @@ public class BasicDAO<T> extends SQLiteTableDAO<T> {
             System.out.println(sql);
             ResultSet set = database.getStatement().executeQuery(sql);
             return getObjectList(set);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (SQLException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;

@@ -1,17 +1,14 @@
-package com.github.onlynight.sqlitejt.sqlitejt.table;
+package com.github.onlynight.sqlite.table;
 
-import com.github.onlynight.sqlitejt.database.annotation.*;
-import com.github.onlynight.sqlitejt.database.utils.ColumnAndAnnotation;
-import com.github.onlynight.sqlitejt.database.utils.TableModel;
-import com.github.onlynight.sqlitejt.sqlitejt.SQLiteUtils;
+import com.github.onlynight.sqlite.table.annotation.*;
+import com.github.onlynight.sqlite.table.utils.ColumnAndAnnotation;
+import com.github.onlynight.sqlite.table.utils.TableModel;
+import com.github.onlynight.sqlite.SQLiteUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author onlynight
@@ -46,7 +43,7 @@ public class SQLiteTableHelper implements SQLiteUtils {
         if (model.isAnnotationPresent(Table.class)) {
             Table table = model.getAnnotation(Table.class);
             String tableName = table.value();
-            if (tableName.equals("") == false) {
+            if (!tableName.equals("")) {
                 tables.add(SQLITE_CMD_DROP_TABLE_IF_EXIST + " " + tableName);
             } else {
                 tables.add(SQLITE_CMD_DROP_TABLE_IF_EXIST + " "
@@ -71,9 +68,7 @@ public class SQLiteTableHelper implements SQLiteUtils {
         List<String> tables = new ArrayList<String>();
         for (Class<?> clazz : models) {
             List<String> tb = dropTable(clazz);
-            for (String table : tb) {
-                tables.add(table);
-            }
+            tables.addAll(tb);
         }
         return tables;
     }
@@ -84,9 +79,9 @@ public class SQLiteTableHelper implements SQLiteUtils {
         String tableName = "";
         if (model.isAnnotationPresent(Table.class)) { // if class has the @Table
             // annotation
-            Table tableAnotation = model.getAnnotation(Table.class);
-            if (tableAnotation.value().equals("") == false) {
-                tableName = tableAnotation.value();
+            Table tableAnnotation = model.getAnnotation(Table.class);
+            if (!tableAnnotation.value().equals("")) {
+                tableName = tableAnnotation.value();
             } else {
                 tableName = model.getSimpleName();
             }
@@ -207,9 +202,7 @@ public class SQLiteTableHelper implements SQLiteUtils {
             PrimaryKey[] primaryKeys = table.primaryKeys();
             if (primaryKeys.length > 0) {
                 keys = new ArrayList<PrimaryKey>();
-                for (PrimaryKey primaryKey : primaryKeys) {
-                    keys.add(primaryKey);
-                }
+                Collections.addAll(keys, primaryKeys);
             }
         }
 
@@ -241,7 +234,7 @@ public class SQLiteTableHelper implements SQLiteUtils {
     }
 
     public static List<ColumnAndAnnotation> getAllColumn(Set<Field> fields) {
-        List<ColumnAndAnnotation> columns = new ArrayList<ColumnAndAnnotation>();
+        List<ColumnAndAnnotation> columns = new ArrayList<>();
         for (Field field : fields) {
             if (field.isAnnotationPresent(Column.class)) {
                 ColumnAndAnnotation columnAndAnnotation = new ColumnAndAnnotation(
@@ -322,17 +315,17 @@ public class SQLiteTableHelper implements SQLiteUtils {
 
     public static List<String> getTables(Class<?> model) {
         List<String> tables = new ArrayList<String>();
-        String tablename;
+        String tableName;
         if (model.isAnnotationPresent(Table.class)) {
             // if class has the @Table
             // annotation
-            Table tableAnotation = model.getAnnotation(Table.class);
-            if (tableAnotation.value().equals("") == false) {
-                tablename = tableAnotation.value();
+            Table tableAnnotation = model.getAnnotation(Table.class);
+            if (!tableAnnotation.value().equals("")) {
+                tableName = tableAnnotation.value();
             } else {
-                tablename = model.getSimpleName();
+                tableName = model.getSimpleName();
             }
-            tables.add(tablename);
+            tables.add(tableName);
 
         } else if (model.isAnnotationPresent(Tables.class)) {
             // if class has
@@ -344,8 +337,8 @@ public class SQLiteTableHelper implements SQLiteUtils {
                 tables.add(table.value());
             }
         } else { // if class has no annotation
-            tablename = model.getSimpleName();
-            tables.add(tablename);
+            tableName = model.getSimpleName();
+            tables.add(tableName);
         }
         return tables;
     }
@@ -358,9 +351,9 @@ public class SQLiteTableHelper implements SQLiteUtils {
             if (model.isAnnotationPresent(Table.class)) {
                 // if class has the @Table
                 // annotation
-                Table tableAnotation = model.getAnnotation(Table.class);
-                if (tableAnotation.value().equals("") == false) {
-                    tableModel = new TableModel(model, tableAnotation.value());
+                Table tableAnnotation = model.getAnnotation(Table.class);
+                if (!tableAnnotation.value().equals("")) {
+                    tableModel = new TableModel(model, tableAnnotation.value());
                 } else {
                     tableModel = new TableModel(model, model.getSimpleName());
                 }
@@ -392,7 +385,7 @@ public class SQLiteTableHelper implements SQLiteUtils {
         // if the field has the @Id annotation and the table has no composite
         // primary key
         if ((column.getAnnotation() instanceof Id)
-                && compositePrimaryKey == false) {
+                && !compositePrimaryKey) {
             String idCloumn = column.getField().getName() + " "
                     + getColumType(column.getField().getType()) + " "
                     + SQLITE_CONSTRAINT_PRIMARY_KEY + " "
@@ -404,7 +397,7 @@ public class SQLiteTableHelper implements SQLiteUtils {
         // composite primary key
         else if ((column.getAnnotation() instanceof Column)
                 && ((Column) column.getAnnotation()).value().equals(
-                DEFAULT_ID_COLUMN_NAME) && compositePrimaryKey == false) {
+                DEFAULT_ID_COLUMN_NAME) && !compositePrimaryKey) {
             String idCloumn = DEFAULT_ID_COLUMN_NAME + " "
                     + getColumType(column.getField().getType()) + " "
                     + SQLITE_CONSTRAINT_PRIMARY_KEY + " "
@@ -420,22 +413,20 @@ public class SQLiteTableHelper implements SQLiteUtils {
             columnSql.append(addBlank(col));
 
             Column annotation = (Column) column.getAnnotation();
-            if (annotation.unique() == true) {
+            if (annotation.unique()) {
                 String unique = addBlank(SQLITE_CONSTRAINT_UNIQUE);
                 columnSql.append(unique);
             }
-            if (annotation.notnull() == true) {
+            if (annotation.notnull()) {
                 String notnull = addBlank(SQLITE_CONSTRAINT_NOT_NULL);
                 columnSql.append(notnull);
             }
-            if (annotation.check() != null
-                    && annotation.check().equals("") == false) {
+            if (!annotation.check().equals("")) {
                 String check = addBlank(SQLITE_CONSTRAINT_CHECK + "("
                         + annotation.check() + ")");
                 columnSql.append(check);
             }
-            if (annotation.default_value() != null
-                    && annotation.default_value().equals("") == false) {
+            if (!annotation.default_value().equals("")) {
                 String default_value = addBlank(SQLITE_CONSTRAINT_DEFAULT + " "
                         + "'" + annotation.default_value() + "'");
                 columnSql.append(default_value);
@@ -474,7 +465,7 @@ public class SQLiteTableHelper implements SQLiteUtils {
     }
 
     private static Column createColumnAnnotation(final Field field) {
-        if (field.isAnnotationPresent(Column.class) == false) {
+        if (!field.isAnnotationPresent(Column.class)) {
             return new Column() {
 
                 @Override

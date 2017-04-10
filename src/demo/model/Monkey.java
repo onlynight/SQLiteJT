@@ -1,6 +1,6 @@
 package demo.model;
 
-import com.github.onlynight.sqlitejt.database.annotation.Table;
+import com.github.onlynight.sqlite.table.annotation.Table;
 
 @Table
 public class Monkey extends Animal {

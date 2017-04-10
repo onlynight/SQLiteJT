@@ -1,4 +1,4 @@
-package com.github.onlynight.sqlitejt.database.annotation;
+package com.github.onlynight.sqlite.table.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -25,29 +25,29 @@ public @interface ForeignKey {
 	 * 
 	 * @return
 	 */
-	public Class<?> srcClass();
+	Class<?> srcClass();
 
 	/**
 	 * the property will appoint the foreign key column's name from the connect @srcClass
 	 * 
 	 * @return
 	 */
-	public String column();
+	String column();
 
 	/**
 	 * when the @srcClass table update , then the foreign table will update
 	 * 
 	 * @return
 	 */
-	public boolean onDelete() default false;
+	boolean onDelete() default false;
 
 	@Deprecated
-	public boolean onInsert() default false;
+	boolean onInsert() default false;
 
 	/**
 	 * when the @srcClass table update the foreign table will update
 	 * 
 	 * @return
 	 */
-	public boolean onUpdate() default false;
+	boolean onUpdate() default false;
 }

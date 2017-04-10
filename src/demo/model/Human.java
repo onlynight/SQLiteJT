@@ -1,8 +1,8 @@
 package demo.model;
 
-import com.github.onlynight.sqlitejt.database.annotation.Column;
-import com.github.onlynight.sqlitejt.database.annotation.Table;
-import com.github.onlynight.sqlitejt.database.annotation.Tables;
+import com.github.onlynight.sqlite.table.annotation.Column;
+import com.github.onlynight.sqlite.table.annotation.Table;
+import com.github.onlynight.sqlite.table.annotation.Tables;
 import demo.dao.ManDAO;
 import demo.dao.WomanDAO;
 

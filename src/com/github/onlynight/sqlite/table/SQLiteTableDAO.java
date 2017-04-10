@@ -1,6 +1,6 @@
-package com.github.onlynight.sqlitejt.sqlitejt.table;
+package com.github.onlynight.sqlite.table;
 
-import com.github.onlynight.sqlitejt.database.annotation.Column;
+import com.github.onlynight.sqlite.table.annotation.Column;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -138,7 +138,7 @@ public abstract class SQLiteTableDAO<T> {
 	 * @param sql
 	 * @return
 	 */
-	public abstract List<T> executeQurey(String sql);
+	public abstract List<T> executeQuery(String sql);
 
 	@SuppressWarnings("unchecked")
 	public List<T> getObjectList(ResultSet set) throws SQLException,

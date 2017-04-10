@@ -1,4 +1,4 @@
-package com.github.onlynight.sqlitejt.sqlitejt;
+package com.github.onlynight.sqlite;
 
 /**
  * contains some sqlite keywords and command

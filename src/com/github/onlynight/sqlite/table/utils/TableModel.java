@@ -1,4 +1,4 @@
-package com.github.onlynight.sqlitejt.database.utils;
+package com.github.onlynight.sqlite.table.utils;
 
 /**
  * contains table class and table name

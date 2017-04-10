@@ -1,7 +1,6 @@
-package com.github.onlynight.sqlitejt.sqlite;
+package com.github.onlynight.sqlitejt;
 
-import com.github.onlynight.sqlitejt.sqlitejt.database.SQLiteDataBaseSession;
-import com.github.onlynight.sqlitejt.sqlitejt.table.SQLiteTableHelper;
+import com.github.onlynight.sqlite.table.SQLiteTableHelper;
 import org.sqlite.JDBC;
 
 import java.sql.*;
@@ -18,17 +17,15 @@ public class SQLiteDataBase {
     private Statement statement;
     private SQLiteDataBaseSession dataBaseSession;
 
-    public SQLiteDataBase(String databaseName, String packateToScan) {
-        this.dataBaseSession = new SQLiteDataBaseSession(databaseName, packateToScan);
+    public SQLiteDataBase(String databaseName, String packageToScan) {
+        this.dataBaseSession = new SQLiteDataBaseSession(databaseName, packageToScan);
         try {
             Class.forName(JDBC.class.getName());
             connection = DriverManager.getConnection(JDBC.PREFIX
                     + dataBaseSession.getDatabaseName());
             statement = connection.createStatement();
             this.createTables();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -41,9 +38,7 @@ public class SQLiteDataBase {
                     + dataBaseSession.getDatabaseName());
             statement = connection.createStatement();
             this.createTables();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

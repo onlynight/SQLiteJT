@@ -1,4 +1,4 @@
-package com.github.onlynight.sqlitejt.database.utils;
+package com.github.onlynight.sqlite.table.utils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

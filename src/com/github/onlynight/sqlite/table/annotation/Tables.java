@@ -1,4 +1,4 @@
-package com.github.onlynight.sqlitejt.database.annotation;
+package com.github.onlynight.sqlite.table.annotation;
 
 
 import java.lang.annotation.*;

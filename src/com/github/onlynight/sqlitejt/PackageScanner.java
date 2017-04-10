@@ -1,7 +1,7 @@
-package com.github.onlynight.sqlitejt.database.tools;
+package com.github.onlynight.sqlitejt;
 
-import com.github.onlynight.sqlitejt.database.annotation.Table;
-import com.github.onlynight.sqlitejt.database.annotation.Tables;
+import com.github.onlynight.sqlite.table.annotation.Table;
+import com.github.onlynight.sqlite.table.annotation.Tables;
 
 import java.io.File;
 import java.io.FileFilter;

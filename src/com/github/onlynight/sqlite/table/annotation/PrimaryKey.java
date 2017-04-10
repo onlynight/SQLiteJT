@@ -1,4 +1,4 @@
-package com.github.onlynight.sqlitejt.database.annotation;
+package com.github.onlynight.sqlite.table.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -13,5 +13,5 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface PrimaryKey {
 
-	public String value();
+	String value();
 }

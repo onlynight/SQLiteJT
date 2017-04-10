@@ -1,4 +1,4 @@
-package com.github.onlynight.sqlitejt.database.annotation;
+package com.github.onlynight.sqlite.table.annotation;
 
 
 import java.lang.annotation.*;
@@ -20,7 +20,7 @@ public @interface Table {
      *
      * @return
      */
-    public String value() default "";
+    String value() default "";
 
-    public PrimaryKey[] primaryKeys() default {};
+    PrimaryKey[] primaryKeys() default {};
 }
