@@ -14,13 +14,13 @@ import java.util.List;
  * @param <T>
  * @author onlynight
  */
-public class BasicDAO<T> extends SQLiteTableDAO<T> {
+public class BaseDAO<T> extends SQLiteTableDAO<T> {
 
     private SQLiteTableSession tableSession;
     private SQLiteDataBase database;
 
     @SuppressWarnings("unchecked")
-    public BasicDAO(SQLiteDataBase database, String tableName) {
+    public BaseDAO(SQLiteDataBase database, String tableName) {
         super();
         this.database = database;
         this.tableSession = new SQLiteTableSession(

@@ -1,10 +1,10 @@
 package demo.dao;
 
 import demo.model.Human;
-import com.github.onlynight.sqlitejt.BasicDAO;
+import com.github.onlynight.sqlitejt.BaseDAO;
 import com.github.onlynight.sqlitejt.SQLiteDataBase;
 
-public class WomanDAO extends BasicDAO<Human>{
+public class WomanDAO extends BaseDAO<Human> {
 
 	public static final String TABLE_NAME = "Man";
 	
